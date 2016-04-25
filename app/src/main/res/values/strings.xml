@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">SmalFhemControl</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="tempertureValue">off</string>
+
+
+    <string name="error_update">Error while updating.</string>
+    <string name="error_timeout">Connection timed out.</string>
+    <string name="error_host_connection">Cannot connect to host.</string>
+    <string name="error_device_list_parse">Could not parse xml device list.</string>
+    <string name="error_authentication">Invalid username or password.</string>
+    <string name="error_invalid_content">Server returned some invalid content. Are you sure the URL is valid?</string>
+    <string name="error_internal_server_error">Internal Server Error (500). Read server logs!</string>
+    <string name="error_bad_request">Bad Request (400)!</string>
+    <string name="error_not_found">Not found (404)!</string>
+    <string name="error_internal">Internal error. Please try again!</string>
+    <string name="error_timer_name_spaces">Timer names may not contain spaces!</string>
+    <string name="retry">Retry</string>
+    <string name="incompleteConfigurationError">Incomplete configuration!</string>
+    <string name="invalidInput">Invalid input!</string>
+
+</resources>
