@@ -1,8 +1,8 @@
 package com.vrmightypirates.smalfhemcontrol;
 
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.TextView;
 
 
 /**
@@ -15,32 +15,12 @@ public class ControlApi  {
     private String temperatureBathroom;
     private final String TAG = ControlApi.class.getSimpleName();
     String[] splitStr;
+    private TextView currentTemperatureBathroom;
 
 
-    public String getTemperatureBathroom() {
-
-        public void onClick(View v) {
-            new DownloadImageTask().execute("http://example.com/image.png");
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-        Log.v(TAG, "fehmresppnse: before ");
-        new Thread() {
-
-            public void run() {
-
-            }
-        }.start();
+    public String getTemperatureBathroom(TextView currentTemperatureBathroom) {
+        this.currentTemperatureBathroom =currentTemperatureBathroom;
+            new SetTemperatureText().execute();
 
         return temperatureBathroom;
     }
@@ -62,24 +42,44 @@ public class ControlApi  {
 
     }
 
-
-
-    private class DownloadImageTask extends AsyncTask<String> {
+    protected class SetTemperatureText extends AsyncTask<Void,String,String> {
         /** The system calls this to perform work in a worker thread and
          * delivers it the parameters given to AsyncTask.execute() */
-        protected String doInBackground(String... urls) {
 
 
 
 
-            return loadImageFromNetwork(urls[0]);
+        @Override
+        protected String doInBackground(Void... params) {
+            Log.v(TAG, "fehmresppnse: in ");
+            while (content==null){
+                Log.v(TAG, "fehmresppnse: in While ");
+                content = connectToFhemHttp.connect();
+                splitStr = content.split("\\s+");
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            if(splitStr[3]!=null){
+                temperatureBathroom = splitStr[3];
+                Log.v(TAG, "fehmresppnse: "+ splitStr[3]);
+
+            }
+
+
+
+            return splitStr[3];
         }
 
         /** The system calls this to perform work in the UI thread and delivers
          * the result from doInBackground() */
-        protected void onPostExecute(Bitmap result) {
-            mImageView.setImageBitmap(result);
+        protected void onPostExecute(String result) {
+            currentTemperatureBathroom.setText(result);
         }
+
     }
 
 

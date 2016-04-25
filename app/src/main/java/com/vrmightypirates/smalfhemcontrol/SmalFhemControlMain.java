@@ -165,8 +165,8 @@ public class SmalFhemControlMain extends AppCompatActivity{
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
 
-
-            currentTemperatureBathroom.setText(controlApi.getTemperatureBathroom());
+            controlApi.getTemperatureBathroom(currentTemperatureBathroom);
+//            currentTemperatureBathroom.setText(controlApi.getTemperatureBathroom(currentTemperatureBathroom));
 
         }
     }
