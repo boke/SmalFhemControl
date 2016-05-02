@@ -20,11 +20,12 @@ import java.net.URL;
 public class ConnectToFhemHttp {
     public static final int SOCKET_TIMEOUT = 20000;
     private static final String url = "http://192.168.0.17:8083/fhem";
-    private static final String command = "?cmd=list%20BZ.HT.BadHeizung%20desiredTemperature&XHR=1";;
+    private static final String command = "?XHR=1&inform=type=status;filter=room=all&timestamp=' + new Date().getTime()";//"?cmd=list%20BZ.HT.BadHeizung%20desiredTemperature&XHR=1";;
 
     private static final String TAG = ConnectToFhemHttp.class.getSimpleName();
 
     public String connect(){
+        Log.e(TAG, "found content: **************:::");
 
         InputStreamReader reader = null;
 
@@ -40,17 +41,20 @@ public class ConnectToFhemHttp {
             String authString = ("" + ":" + "");
             connection.addRequestProperty("Authorization", "Basic " +
                     Base64.encodeToString(authString.getBytes(), Base64.NO_WRAP));
+            Log.d(TAG,"response test");
             int statusCode = connection.getResponseCode();
             Log.d(TAG,"response status code is " + statusCode);
-
+            Log.d(TAG,"response test");
             RequestResult<InputStream> response = new RequestResult((InputStream) new BufferedInputStream(connection.getInputStream()));
-
+            Log.d(TAG,"response test");
             reader = new InputStreamReader(response.content);
+            Log.d(TAG,"response test3");
             String content = CharStreams.toString(reader);
+            Log.d(TAG,"response test4");
             if (content.contains("<title>") || content.contains("<div id=")) {
                 Log.e(TAG, "found strange content: " + content);
             }
-            Log.e(TAG, "found content: " + content);
+            Log.e(TAG, "found content: **************" + content);
 
             return content;
 //            return new RequestResult<>((InputStream) new BufferedInputStream(connection.getInputStream()));

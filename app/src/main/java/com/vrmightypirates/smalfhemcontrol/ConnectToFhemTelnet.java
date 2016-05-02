@@ -26,11 +26,12 @@ public class ConnectToFhemTelnet {
             try {
                 Log.e(TAG, "Is Connected? "+ System.getProperty("line.separator"));
                 Socket s = new Socket(SERVER_IP, SERVERPORT);
+                Log.e(TAG, "Is Connect");
                 Log.e(TAG, "Is Connected: " +s.isConnected());
                 BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
                 BufferedWriter out = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
 
-                outStr = "{ReadingsVal('" + akt_Device + "','temperature','')}";
+                outStr = "{ReadingsVal('" + akt_Device + "','desiredTemperature','')}";
                 outStr1 = outStr + System.getProperty("line.separator");
 
                 out.write(outStr1);
@@ -38,6 +39,7 @@ public class ConnectToFhemTelnet {
                 String temptemperature = in.readLine() + System.getProperty("line.separator");
                 if (temptemperature.length() > 2) {
                     retStr[0] = temptemperature;
+                    Log.i(TAG, "temptemperature: " + temptemperature);
                 }
 
                 outStr = "{ReadingsVal('" + akt_Device + "','humidity','')}";
@@ -47,6 +49,7 @@ public class ConnectToFhemTelnet {
                 String temphumidity = in.readLine() + System.getProperty("line.separator");
                 if (temphumidity.length() > 2) {
                     retStr[1] = temphumidity;
+                    Log.i(TAG, "temphumidity: " + temphumidity);
                 }
 
                 outStrAlias = "{AttrVal('" + akt_Device + "','alias','')}";
@@ -56,6 +59,7 @@ public class ConnectToFhemTelnet {
                 String tempalias = in.readLine();
                 if (tempalias.length() > 2) {
                     retStr[2] = tempalias;
+                    Log.i(TAG, "tempalias: " + tempalias);
                 } else {
                     retStr[2] = akt_Device;
                 }
@@ -76,4 +80,6 @@ public class ConnectToFhemTelnet {
         }
         return retStr;
     }
+
+
 }
