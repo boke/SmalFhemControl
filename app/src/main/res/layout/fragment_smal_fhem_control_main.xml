@@ -16,7 +16,7 @@
     <SeekBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/seekBar"
+        android:id="@+id/seekBarHeater"
         android:max="100"
         android:progress="20"
         android:progressDrawable="@android:color/white"

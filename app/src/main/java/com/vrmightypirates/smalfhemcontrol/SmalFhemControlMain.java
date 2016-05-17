@@ -69,8 +69,6 @@ public class SmalFhemControlMain extends AppCompatActivity{
         ControlApi controlApi = new ControlApi();
 
 
-
-
     }
 
 
@@ -110,6 +108,7 @@ public class SmalFhemControlMain extends AppCompatActivity{
         private static final String ARG_SECTION_NUMBER = "section_number";
         private SeekBar temperatureControlBathroom = null;
         ControlApi controlApi = new ControlApi();
+        API api = new API();
 
         public PlaceholderFragment() {
         }
@@ -134,7 +133,7 @@ public class SmalFhemControlMain extends AppCompatActivity{
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             currentTemperatureBathroom = (TextView) rootView.findViewById(R.id.themperatureHeater);
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            temperatureControlBathroom = (SeekBar) rootView.findViewById(R.id.seekBar);
+            temperatureControlBathroom = (SeekBar) rootView.findViewById(R.id.seekBarHeater);
 
             temperatureControlBathroom.setOnSeekBarChangeListener(new OnSeekBarChangeListener(){
 
@@ -166,6 +165,9 @@ public class SmalFhemControlMain extends AppCompatActivity{
             super.onActivityCreated(savedInstanceState);
 
             controlApi.getTemperatureBathroom(currentTemperatureBathroom);
+
+            api.initConnection(ConnectionType.telnet);
+            api.getAutoUpdate("BZ.HT.BadHeizung", DeviceType.HeaterMax, currentTemperatureBathroom);
 //            currentTemperatureBathroom.setText(controlApi.getTemperatureBathroom(currentTemperatureBathroom));
 
         }
