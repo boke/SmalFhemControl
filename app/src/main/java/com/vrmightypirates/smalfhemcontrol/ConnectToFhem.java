@@ -16,8 +16,6 @@ public class ConnectToFhem {
     ArrayList<FhemDevice> deviceList = new ArrayList<FhemDevice>();
 
     public boolean connect(ConnectionType connectionType){
-
-        ConnectionTelnet connectionTelnet = null;
         this.connectionType = connectionType;
 
         switch (connectionType) {
@@ -25,8 +23,9 @@ public class ConnectToFhem {
                 ConnectionHttp connectionHttp = new ConnectionHttp();
                 break;
             case telnet:
-                connectionTelnet = new ConnectionTelnet();
-                connectionTelnet.execute();
+                Log.i(TAG, "connect: telnet" );
+                this.connectionTelnet = new ConnectionTelnet();
+               // connectionTelnet.execute();
                 break;
             default:
                 return false;
@@ -42,7 +41,7 @@ public class ConnectToFhem {
                 connectionHttp.closeConnection();
                 break;
             case telnet:
-                connectionTelnet.cancel(true);
+              //  connectionTelnet.cancel(true);
                 break;
             default:
                 return false;
@@ -57,7 +56,7 @@ public class ConnectToFhem {
             case http:
                 break;
             case telnet:
-                connectionTelnet.sendMessage(message);
+               // connectionTelnet.sendMessage(message);
                 break;
             default:
                 return false;
@@ -107,14 +106,14 @@ public class ConnectToFhem {
             case http:
                 break;
             case telnet:
-                connectionTelnet.sendMessage("inform " +message);
+                if( connectionTelnet!= null){
+                    connectionTelnet.startConnection("inform " +message);
+                }
+
                 break;
             default:
                 return false;
         }
-
         return true;
     }
-
-
 }

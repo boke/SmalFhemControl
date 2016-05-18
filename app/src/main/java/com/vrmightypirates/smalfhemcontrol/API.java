@@ -10,7 +10,7 @@ public class API implements LooperThread.OnNewMessageFromFhemListener {
     public boolean initConnection(ConnectionType connectionType){
 
         connectionToFhem = new ConnectToFhem();
-        connectionToFhem.connect(connectionType);
+        connectionToFhem.connect(ConnectionType.telnet);//connectionType
 
         return true;
     }
