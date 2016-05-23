@@ -1,4 +1,4 @@
-package com.vrmightypirates.smalfhemcontrol;
+package com.vrmightypirates.smallfhemcontrol;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,7 +20,9 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-public class SmalFhemControlMain extends AppCompatActivity{
+import com.vrmightypirates.smalfhemcontrol.R;
+
+public class SmallFhemControlMain extends AppCompatActivity{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -163,8 +165,6 @@ public class SmalFhemControlMain extends AppCompatActivity{
         @Override
         public void onActivityCreated(@Nullable Bundle savedInstanceState) {
             super.onActivityCreated(savedInstanceState);
-
-            controlApi.getTemperatureBathroom(currentTemperatureBathroom);
 
             api.initConnection(ConnectionType.telnet);
             api.getAutoUpdate("BZ.HT.BadHeizung", DeviceType.HeaterMax, currentTemperatureBathroom);

@@ -1,16 +1,16 @@
-package com.vrmightypirates.smalfhemcontrol;
+package com.vrmightypirates.smallfhemcontrol;
 
 /**
  * Created by Boke on 15.05.2016.
  */
-public class API implements LooperThread.OnNewMessageFromFhemListener {
+public class API {
 
     ConnectToFhem connectionToFhem = null;
 
     public boolean initConnection(ConnectionType connectionType){
 
         connectionToFhem = new ConnectToFhem();
-        connectionToFhem.connect(ConnectionType.telnet);//connectionType
+      /*  connectionToFhem.connect(ConnectionType.telnet);//connectionType*/
 
         return true;
     }
@@ -22,8 +22,6 @@ public class API implements LooperThread.OnNewMessageFromFhemListener {
     }
 
     public boolean getHeat(String device){
-
-
 
         return true;
     }
@@ -60,10 +58,5 @@ public class API implements LooperThread.OnNewMessageFromFhemListener {
         return true;
     }
 
-    @Override
-    public void onMessageFromFhemReceived(String messageFromFhem) {
 
-
-
-    }
 }

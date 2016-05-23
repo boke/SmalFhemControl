@@ -1,12 +1,13 @@
-package com.vrmightypirates.smalfhemcontrol;
+package com.vrmightypirates.smallfhemcontrol;
 
-import android.widget.TextView;
+import android.util.Log;
 
 /**
  * Created by Boke on 15.05.2016.
  */
 public class DeviceHeaterMax extends FhemDevice {
 
+    private static final String TAG = DeviceHeaterMax.class.getSimpleName() ;
     private String desireTemperature;
 
     public DeviceHeaterMax(String deviceName, Object widget) {
@@ -20,8 +21,9 @@ public class DeviceHeaterMax extends FhemDevice {
 
     public void setDesireTemperature(String desireTemperature) {
         this.desireTemperature = desireTemperature;
-        TextView textView = (TextView) super.getWidget();
-        textView.setText(desireTemperature);
+
+       
+        Log.i(TAG, "setDesireTemperature: " + desireTemperature);
     }
 
 }

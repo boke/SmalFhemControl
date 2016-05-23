@@ -1,4 +1,4 @@
-package com.vrmightypirates.smalfhemcontrol;
+package com.vrmightypirates.smallfhemcontrol;
 
 import android.util.Log;
 
@@ -7,38 +7,22 @@ import java.util.ArrayList;
 /**
  * Created by Boke on 15.05.2016.
  */
-public class ConnectToFhem {
+public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhem {
 
     private static final String TAG = ConnectToFhem.class.getSimpleName();
-    ConnectionType connectionType;
-    ConnectionHttp connectionHttp = null;
-    ConnectionTelnet connectionTelnet = null;
+    ConnectionType connectionType = ConnectionType.telnet;
+    CommunicateWithFhemHttp communicateWithFhemHttp = null;
+    CommunicateWithFhemTelnet communicateWithFhemTelnet = null;
     ArrayList<FhemDevice> deviceList = new ArrayList<FhemDevice>();
+    FhemMessageParser fhemParser = new FhemMessageParser();
+    private boolean autoUpdateIsRunning = false;
 
-    public boolean connect(ConnectionType connectionType){
-        this.connectionType = connectionType;
-
-        switch (connectionType) {
-            case http:
-                ConnectionHttp connectionHttp = new ConnectionHttp();
-                break;
-            case telnet:
-                Log.i(TAG, "connect: telnet" );
-                this.connectionTelnet = new ConnectionTelnet();
-               // connectionTelnet.execute();
-                break;
-            default:
-                return false;
-        }
-
-        return true;
-    }
 
     public boolean disconnect(String device){
 
         switch (connectionType) {
             case http:
-                connectionHttp.closeConnection();
+                communicateWithFhemHttp.closeConnection();
                 break;
             case telnet:
               //  connectionTelnet.cancel(true);
@@ -93,12 +77,18 @@ public class ConnectToFhem {
 
     private boolean autoUpdateAllDevices(ArrayList<FhemDevice> deviceList) {
 
+
         StringBuilder message = new StringBuilder();
 
-        message.append("inform ");
+        if(autoUpdateIsRunning == true){
+            communicateWithFhemTelnet.cancel(true);
+        }
+
+        message.append("inform on ");
 
         for (FhemDevice object: deviceList) {
            message.append(object.getDeviceName());
+
         }
 
         Log.i(TAG, "autoUpdateAllDevices: "+ message);
@@ -106,14 +96,31 @@ public class ConnectToFhem {
             case http:
                 break;
             case telnet:
-                if( connectionTelnet!= null){
-                    connectionTelnet.startConnection("inform " +message);
-                }
-
+                communicateWithFhemTelnet = new CommunicateWithFhemTelnet(this, message.toString());
                 break;
             default:
                 return false;
         }
+
+        autoUpdateIsRunning = true;
         return true;
+    }
+
+    private boolean parseFhemMessage(String messageFromFhem){
+
+        if(deviceList != null){
+            fhemParser.parseMessage(messageFromFhem,deviceList);
+        }else{
+            return false;
+        }
+
+        return true;
+
+    }
+
+    @Override
+    public void onMessageFromFhemReceived(String messageFromFhem) {
+        parseFhemMessage(messageFromFhem);
+        Log.i(TAG, "onMessageFromFhemReceived: "+messageFromFhem);
     }
 }

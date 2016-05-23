@@ -1,4 +1,4 @@
-package com.vrmightypirates.smalfhemcontrol;
+package com.vrmightypirates.smallfhemcontrol;
 
 /**
  * Created by Boke on 15.05.2016.
@@ -6,5 +6,6 @@ package com.vrmightypirates.smalfhemcontrol;
 public enum DeviceType {
     HeaterMax,
     HeaterHomematic,
-    Sonos;
+    Sonos,
+    NotDefined;
 }

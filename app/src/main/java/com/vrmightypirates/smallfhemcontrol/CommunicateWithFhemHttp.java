@@ -1,9 +1,9 @@
-package com.vrmightypirates.smalfhemcontrol;
+package com.vrmightypirates.smallfhemcontrol;
 
 /**
  * Created by Boke on 15.05.2016.
  */
-public class ConnectionHttp {
+public class CommunicateWithFhemHttp {
 
     public boolean openConnection(String device){
 

@@ -1,4 +1,4 @@
-package com.vrmightypirates.smalfhemcontrol;
+package com.vrmightypirates.smallfhemcontrol;
 
 import android.util.Log;
 

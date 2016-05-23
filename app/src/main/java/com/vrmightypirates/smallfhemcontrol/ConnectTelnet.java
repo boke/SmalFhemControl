@@ -1,4 +1,4 @@
-package com.vrmightypirates.smalfhemcontrol;
+package com.vrmightypirates.smallfhemcontrol;
 
 class ConnectTelnet {//extends AsyncTask<Void,String,String> {
     /*private static final String TAG = ConnectTelnet.class.getSimpleName() ;

@@ -22,7 +22,7 @@
  *   Boston, MA  02110-1301  USA
  */
 
-package com.vrmightypirates.smalfhemcontrol;
+package com.vrmightypirates.smallfhemcontrol;
 
 public class RequestResult<CONTENT> {
     public final CONTENT content;
