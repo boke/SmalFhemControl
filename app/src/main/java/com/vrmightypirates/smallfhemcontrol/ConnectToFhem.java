@@ -13,10 +13,10 @@ public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhe
     ConnectionType connectionType = ConnectionType.telnet;
     CommunicateWithFhemHttp communicateWithFhemHttp = null;
     CommunicateWithFhemTelnet communicateWithFhemTelnet = null;
-    ArrayList<FhemDevice> deviceList = new ArrayList<FhemDevice>();
-    FhemMessageParser fhemParser = new FhemMessageParser();
     private boolean autoUpdateIsRunning = false;
+    private ArrayList<FhemDevice> deviceList;
 
+    private  FhemMessageParser fhemParser = new FhemMessageParser();
 
     public boolean disconnect(String device){
 
@@ -54,30 +54,11 @@ public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhe
         return true;
     }
 
-    public boolean addDeviceToListener(String deviceName, DeviceType deviceType, Object widget) {
-
-        switch (deviceType) {
-            case HeaterMax:
-                deviceList.add(new DeviceHeaterMax(deviceName, widget));
-                Log.i(TAG, "addDeviceToListener: " + deviceName);
-                break;
-            case HeaterHomematic:
-                break;
-            case Sonos:
-                break;
-            default:
-                return false;
-        }
-
-        autoUpdateAllDevices(deviceList);
 
 
-        return true;
-    }
+    public boolean autoUpdateAllDevices(ArrayList<FhemDevice> deviceList) {
 
-    private boolean autoUpdateAllDevices(ArrayList<FhemDevice> deviceList) {
-
-
+        this.deviceList = deviceList;
         StringBuilder message = new StringBuilder();
 
         if(autoUpdateIsRunning == true){
@@ -116,6 +97,10 @@ public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhe
 
         return true;
 
+    }
+
+    public FhemMessageParser getFhemParser() {
+        return fhemParser;
     }
 
     @Override

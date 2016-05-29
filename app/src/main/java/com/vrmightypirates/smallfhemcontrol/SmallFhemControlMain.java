@@ -1,6 +1,8 @@
 package com.vrmightypirates.smallfhemcontrol;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -35,7 +37,7 @@ public class SmallFhemControlMain extends AppCompatActivity{
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private SeekBar temperatureControlBathroom = null;
     private SeekBar seekBar;
-    private static TextView currentTemperatureBathroom;
+    private static TextView currentTemperatureBathroomTextView;
 
 
     /**
@@ -102,18 +104,22 @@ public class SmallFhemControlMain extends AppCompatActivity{
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
+    public static class PlaceholderFragment extends Fragment implements FhemMessageParser.DeviceStatusChanged {
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+        private static final String TAG = PlaceholderFragment.class.getSimpleName();
         private SeekBar temperatureControlBathroom = null;
         ControlApi controlApi = new ControlApi();
         API api = new API();
+        View rootView;
 
         public PlaceholderFragment() {
         }
+
+
 
         /**
          * Returns a new instance of this fragment for the given section
@@ -125,15 +131,17 @@ public class SmallFhemControlMain extends AppCompatActivity{
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
 
+
             return fragment;
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_smal_fhem_control_main, container, false);
+            rootView = inflater.inflate(R.layout.fragment_smal_fhem_control_main, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            currentTemperatureBathroom = (TextView) rootView.findViewById(R.id.themperatureHeater);
+            currentTemperatureBathroomTextView = (TextView) rootView.findViewById(R.id.themperatureHeater);
+            Log.i(TAG, "onDeviceStatusChangeON: " + (currentTemperatureBathroomTextView.getId()));
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             temperatureControlBathroom = (SeekBar) rootView.findViewById(R.id.seekBarHeater);
 
@@ -167,13 +175,42 @@ public class SmallFhemControlMain extends AppCompatActivity{
             super.onActivityCreated(savedInstanceState);
 
             api.initConnection(ConnectionType.telnet);
-            api.getAutoUpdate("BZ.HT.BadHeizung", DeviceType.HeaterMax, currentTemperatureBathroom);
-//            currentTemperatureBathroom.setText(controlApi.getTemperatureBathroom(currentTemperatureBathroom));
+            DeviceHeaterMax deviceHeaterMaxBathroom = new DeviceHeaterMax("BZ.HT.BadHeizung", currentTemperatureBathroomTextView);
+            api.addDeviceToUpdateListener(deviceHeaterMaxBathroom);
+            api.startAutoUpdate();
+            api.getParser().addToDeviceChangeListener(this);
+
+        }
+
+        @Override
+        public void onDeviceStatusChange(FhemDevice device) {
+            Log.i(TAG, "onDeviceStatusChange: " + device.getDeviceName());
+
+            switch (device.getDeviceType()) {
+                case HeaterMax:
+
+                    if(device.getDeviceName().equals("BZ.HT.BadHeizung")){
+                        
+                    }
+                   DeviceHeaterMax heaterDevice = (DeviceHeaterMax)device;
+
+                    TextView text = (TextView) rootView.findViewById(view.getId());
+                    Log.i(TAG, "onDeviceStatusChange: " + ((TextView) device.getWidget()).getId());
+                    text.setText(heaterDevice.getDesireTemperature());
+
+
+                    break;
+                case HeaterHomematic:
+                    break;
+                case Sonos:
+                    break;
+                case NotDefined:
+                    break;
+            }
+
 
         }
     }
-
-
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

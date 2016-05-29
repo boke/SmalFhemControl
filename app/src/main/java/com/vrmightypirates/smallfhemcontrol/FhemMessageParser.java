@@ -1,6 +1,7 @@
 package com.vrmightypirates.smallfhemcontrol;
 
 import android.util.Log;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -9,7 +10,15 @@ import java.util.ArrayList;
  */
 public class FhemMessageParser {
 
+    DeviceStatusChanged deviceStatusChanged;
+
+    public void addToDeviceChangeListener(DeviceStatusChanged deviceStatusChanged){
+        this.deviceStatusChanged = deviceStatusChanged;
+    }
+
+
     private static final String TAG = FhemMessageParser.class.getSimpleName();
+
 
     public void parseMessage(String message, ArrayList<FhemDevice> deviceList){
 
@@ -26,6 +35,8 @@ public class FhemMessageParser {
                             switch(params[2]){
                                 case "desiredTemperature": {
                                     deviceHeaterMax.setDesireTemperature(params[3]);
+                                    deviceHeaterMax.setDesireTemperature(params[3]);
+
                                     break;
                                 }
                                 case "battery": {
@@ -47,7 +58,14 @@ public class FhemMessageParser {
                             break;
                     }
                 }
+
+               deviceStatusChanged.onDeviceStatusChange(device);
+                Log.i(TAG, "onDeviceStatusChange: " + ((TextView) device.getWidget()).getId());
             }
+    }
+
+    interface DeviceStatusChanged {
+        void onDeviceStatusChange(FhemDevice device);
     }
 
 }

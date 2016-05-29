@@ -11,11 +11,12 @@ public class FhemDevice {
     private String batteryStatus;
     private Object widget;
 
+
     public Object getWidget() {
         return widget;
     }
 
-    public void setWidget(Object widget) {
+    public void setWidget(int widget) {
         this.widget = widget;
     }
 
@@ -23,7 +24,10 @@ public class FhemDevice {
         this.deviceName = deviceName;
         this.deviceType = deviceType;
         this.widget = widget;
+
     }
+
+
 
     public String getBatteryStatus() {
         return batteryStatus;
@@ -56,4 +60,5 @@ public class FhemDevice {
     public void setStatus(String status) {
         this.status = status;
     }
+
 }

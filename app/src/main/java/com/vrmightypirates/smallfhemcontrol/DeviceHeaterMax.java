@@ -11,7 +11,8 @@ public class DeviceHeaterMax extends FhemDevice {
     private String desireTemperature;
 
     public DeviceHeaterMax(String deviceName, Object widget) {
-        super(deviceName,DeviceType.HeaterMax, widget );
+        super(deviceName,DeviceType.HeaterMax, widget);
+
     }
 
 
@@ -21,9 +22,6 @@ public class DeviceHeaterMax extends FhemDevice {
 
     public void setDesireTemperature(String desireTemperature) {
         this.desireTemperature = desireTemperature;
-
-       
         Log.i(TAG, "setDesireTemperature: " + desireTemperature);
     }
-
 }
