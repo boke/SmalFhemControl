@@ -1,8 +1,6 @@
 package com.vrmightypirates.smallfhemcontrol;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -37,7 +35,7 @@ public class SmallFhemControlMain extends AppCompatActivity{
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private SeekBar temperatureControlBathroom = null;
     private SeekBar seekBar;
-    private static TextView currentTemperatureBathroomTextView;
+
 
 
     /**
@@ -69,9 +67,6 @@ public class SmallFhemControlMain extends AppCompatActivity{
                         .setAction("Action", null).show();
             }
         });
-
-        ControlApi controlApi = new ControlApi();
-
 
     }
 
@@ -115,6 +110,7 @@ public class SmallFhemControlMain extends AppCompatActivity{
         ControlApi controlApi = new ControlApi();
         API api = new API();
         View rootView;
+        private TextView currentTemperatureBathroomTextView;
 
         public PlaceholderFragment() {
         }
@@ -176,6 +172,9 @@ public class SmallFhemControlMain extends AppCompatActivity{
 
             api.initConnection(ConnectionType.telnet);
             DeviceHeaterMax deviceHeaterMaxBathroom = new DeviceHeaterMax("BZ.HT.BadHeizung", currentTemperatureBathroomTextView);
+            TextView view1 = (TextView) deviceHeaterMaxBathroom.getWidget();
+            view1.setText("Test1");
+
             api.addDeviceToUpdateListener(deviceHeaterMaxBathroom);
             api.startAutoUpdate();
             api.getParser().addToDeviceChangeListener(this);
@@ -183,31 +182,12 @@ public class SmallFhemControlMain extends AppCompatActivity{
         }
 
         @Override
-        public void onDeviceStatusChange(FhemDevice device) {
+        public void onDeviceStatusChange(final FhemDevice device) {
             Log.i(TAG, "onDeviceStatusChange: " + device.getDeviceName());
 
-            switch (device.getDeviceType()) {
-                case HeaterMax:
-
-                    if(device.getDeviceName().equals("BZ.HT.BadHeizung")){
-                        
-                    }
-                   DeviceHeaterMax heaterDevice = (DeviceHeaterMax)device;
-
-                    TextView text = (TextView) rootView.findViewById(view.getId());
-                    Log.i(TAG, "onDeviceStatusChange: " + ((TextView) device.getWidget()).getId());
-                    text.setText(heaterDevice.getDesireTemperature());
-
-
-                    break;
-                case HeaterHomematic:
-                    break;
-                case Sonos:
-                    break;
-                case NotDefined:
-                    break;
-            }
-
+            final DeviceHeaterMax deviceHeaterMax = (DeviceHeaterMax)device;
+            final TextView textView = (TextView) deviceHeaterMax.getWidget();
+            textView.setText(deviceHeaterMax.getDesireTemperature());
 
         }
     }
@@ -232,7 +212,7 @@ public class SmallFhemControlMain extends AppCompatActivity{
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 1;
         }
 
         @Override

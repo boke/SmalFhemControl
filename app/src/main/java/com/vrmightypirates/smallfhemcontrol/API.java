@@ -1,6 +1,7 @@
 package com.vrmightypirates.smallfhemcontrol;
 
 import android.util.Log;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -55,12 +56,18 @@ public class API {
     public boolean addDeviceToUpdateListener(FhemDevice device) {
 
         deviceList.add(device);
+
+        TextView view1 = (TextView) device.getWidget();
+        view1.setText("Test2");
+
         return true;
     }
 
     public boolean startAutoUpdate() {
 
         connectionToFhem.autoUpdateAllDevices(this.deviceList);
+        TextView view1 = (TextView) this.deviceList.get(0).getWidget();
+      //  view1.setText("Test3");
         return true;
     }
 

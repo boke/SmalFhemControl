@@ -1,6 +1,7 @@
 package com.vrmightypirates.smallfhemcontrol;
 
 import android.util.Log;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -66,9 +67,13 @@ public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhe
         }
 
         message.append("inform on ");
+        TextView view1 = (TextView) this.deviceList.get(0).getWidget();
+        Log.i(TAG, "autoUpdateAllDevices: "+ deviceList.size() +this.deviceList.get(0).getDeviceName() +"4" );
+        view1.setText("Test4");
 
         for (FhemDevice object: deviceList) {
            message.append(object.getDeviceName());
+
 
         }
 
@@ -90,7 +95,8 @@ public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhe
     private boolean parseFhemMessage(String messageFromFhem){
 
         if(deviceList != null){
-            fhemParser.parseMessage(messageFromFhem,deviceList);
+            fhemParser.parseMessage(messageFromFhem,this.deviceList);
+
         }else{
             return false;
         }
@@ -107,5 +113,6 @@ public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhe
     public void onMessageFromFhemReceived(String messageFromFhem) {
         parseFhemMessage(messageFromFhem);
         Log.i(TAG, "onMessageFromFhemReceived: "+messageFromFhem);
+
     }
 }
