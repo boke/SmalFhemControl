@@ -1,7 +1,6 @@
 package com.vrmightypirates.smallfhemcontrol;
 
 import android.util.Log;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -16,17 +15,16 @@ public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhe
     CommunicateWithFhemTelnet communicateWithFhemTelnet = null;
     private boolean autoUpdateIsRunning = false;
     private ArrayList<FhemDevice> deviceList;
-
     private  FhemMessageParser fhemParser = new FhemMessageParser();
 
-    public boolean disconnect(String device){
+
+    public boolean sendMessage(String message) {
 
         switch (connectionType) {
             case http:
-                communicateWithFhemHttp.closeConnection();
                 break;
             case telnet:
-              //  connectionTelnet.cancel(true);
+                // connectionTelnet.sendMessage(message);
                 break;
             default:
                 return false;
@@ -34,27 +32,6 @@ public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhe
 
         return true;
     }
-
-    public boolean sendMessage(String message){
-
-        switch (connectionType) {
-            case http:
-                break;
-            case telnet:
-               // connectionTelnet.sendMessage(message);
-                break;
-            default:
-                return false;
-        }
-
-        return true;
-    }
-
-    public boolean getComand(String device){
-
-        return true;
-    }
-
 
 
     public boolean autoUpdateAllDevices(ArrayList<FhemDevice> deviceList) {
@@ -67,14 +44,9 @@ public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhe
         }
 
         message.append("inform on ");
-        TextView view1 = (TextView) this.deviceList.get(0).getWidget();
-        Log.i(TAG, "autoUpdateAllDevices: "+ deviceList.size() +this.deviceList.get(0).getDeviceName() +"4" );
-        view1.setText("Test4");
 
         for (FhemDevice object: deviceList) {
            message.append(object.getDeviceName());
-
-
         }
 
         Log.i(TAG, "autoUpdateAllDevices: "+ message);

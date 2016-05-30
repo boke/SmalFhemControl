@@ -1,7 +1,5 @@
 package com.vrmightypirates.smallfhemcontrol;
 
-import android.util.Log;
-
 /**
  * Created by Boke on 15.05.2016.
  */
@@ -22,6 +20,5 @@ public class DeviceHeaterMax extends FhemDevice {
 
     public void setDesireTemperature(String desireTemperature) {
         this.desireTemperature = desireTemperature;
-        Log.i(TAG, "setDesireTemperature: " + desireTemperature);
     }
 }

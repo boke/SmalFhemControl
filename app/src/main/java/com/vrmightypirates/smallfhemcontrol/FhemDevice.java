@@ -24,7 +24,6 @@ public class FhemDevice {
         this.deviceName = deviceName;
         this.deviceType = deviceType;
         this.widget = widget;
-
     }
 
 

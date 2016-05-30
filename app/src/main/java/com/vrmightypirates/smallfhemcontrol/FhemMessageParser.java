@@ -10,15 +10,12 @@ import java.util.ArrayList;
  */
 public class FhemMessageParser {
 
-    DeviceStatusChanged deviceStatusChanged;
-
-    public void addToDeviceChangeListener(DeviceStatusChanged deviceStatusChanged){
-        this.deviceStatusChanged = deviceStatusChanged;
-    }
-
-
+    DeviceStatusChangedListener deviceStatusChangedListener;
     private static final String TAG = FhemMessageParser.class.getSimpleName();
 
+    public void addToDeviceChangeListener(DeviceStatusChangedListener deviceStatusChangedListener){
+        this.deviceStatusChangedListener = deviceStatusChangedListener;
+    }
 
     public void parseMessage(String message, ArrayList<FhemDevice> deviceList){
 
@@ -59,12 +56,12 @@ public class FhemMessageParser {
                     }
                 }
 
-               deviceStatusChanged.onDeviceStatusChange(device);
+               deviceStatusChangedListener.onDeviceStatusChange(device);
                 Log.i(TAG, "onDeviceStatusChange: " + ((TextView) device.getWidget()).getId());
             }
     }
 
-    interface DeviceStatusChanged {
+    interface DeviceStatusChangedListener {
         void onDeviceStatusChange(FhemDevice device);
     }
 
