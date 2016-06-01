@@ -17,6 +17,48 @@ public class FhemMessageParser {
         this.deviceStatusChangedListener = deviceStatusChangedListener;
     }
 
+    public void parseMessageForSingleDevice(String message, FhemDevice device){
+
+
+        String params[] = message.split(" ");
+
+        switch (device.getDeviceType()) {
+            case HeaterMax:
+                DeviceHeaterMax deviceHeaterMax = (device instanceof DeviceHeaterMax) ? ((DeviceHeaterMax) device) : null;
+
+                switch(params[2]){
+                    case "desiredTemperature": {
+                        deviceHeaterMax.setDesireTemperatureValue(params[3]);
+                        deviceHeaterMax.setDesireTemperatureValue(params[3]);
+
+                        break;
+                    }
+                    case "battery": {
+                        deviceHeaterMax.setBatteryStatus(params[3]);
+                        break;
+                    }
+                    default:
+                        break;
+
+                }
+
+                Log.i(TAG, "deviceHeaterMax: " + deviceHeaterMax.getDesireTemperatureValue() );
+                //deviceHeaterMax.setDesireTemperatureInFhem();
+                Log.i(TAG, "HeaterMax: ");
+                break;
+            case HeaterHomematic:
+                break;
+            case Sonos:
+                break;
+        }
+
+
+        deviceStatusChangedListener.onDeviceStatusChange(device);
+        Log.i(TAG, "onDeviceStatusChange: " + ((TextView) device.getWidget()).getId());
+
+    }
+
+
     public void parseMessage(String message, ArrayList<FhemDevice> deviceList){
 
             for (FhemDevice device: deviceList) {
@@ -31,8 +73,8 @@ public class FhemMessageParser {
 
                             switch(params[2]){
                                 case "desiredTemperature": {
-                                    deviceHeaterMax.setDesireTemperature(params[3]);
-                                    deviceHeaterMax.setDesireTemperature(params[3]);
+                                    deviceHeaterMax.setDesireTemperatureValue(params[3]);
+                                    deviceHeaterMax.setDesireTemperatureValue(params[3]);
 
                                     break;
                                 }
@@ -45,8 +87,8 @@ public class FhemMessageParser {
 
                             }
 
-                            Log.i(TAG, "deviceHeaterMax: " + deviceHeaterMax.getDesireTemperature() );
-                            //deviceHeaterMax.setDesireTemperature();
+                            Log.i(TAG, "deviceHeaterMax: " + deviceHeaterMax.getDesireTemperatureValue() );
+                            //deviceHeaterMax.setDesireTemperatureInFhem();
                             Log.i(TAG, "HeaterMax: ");
                             break;
                         case HeaterHomematic:

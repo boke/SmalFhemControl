@@ -15,17 +15,20 @@ import java.net.Socket;
  */
 
 public class CommunicateWithFhemTelnet extends AsyncTask<String,String,Void> {
+    private final boolean singleResponse;
     OnMassageFromFhem onMassageFromFhem;
-
     private final String TAG = CommunicateWithFhemTelnet.class.getSimpleName();
     BufferedWriter outputWriter = null;
     Socket socket = null;
     String socketIp = "192.168.0.17";
     int socketPort = 7072;
 
-    CommunicateWithFhemTelnet(OnMassageFromFhem onMassageFromFhem, String message){
+
+
+    CommunicateWithFhemTelnet(OnMassageFromFhem onMassageFromFhem, String message, boolean singelResponse){
         this.onMassageFromFhem = onMassageFromFhem;
-        this.execute(message);
+        this.singleResponse = singelResponse;
+        this.execute(message,Boolean.toString(singelResponse));
     }
 
     @Override
@@ -38,7 +41,7 @@ public class CommunicateWithFhemTelnet extends AsyncTask<String,String,Void> {
 
         BufferedWriter outputWriter = null;
         String messageFromFhem = null;
-        boolean whileRun = true;
+        String singleResponseString = params[1];
 
         try {
             socket = new Socket(socketIp, socketPort);
@@ -65,13 +68,17 @@ public class CommunicateWithFhemTelnet extends AsyncTask<String,String,Void> {
             e.printStackTrace();
         }
 
-        while (whileRun) {
+        while (!isCancelled()) {
 
             int i = 1;
             try {
                 messageFromFhem = inputReader.readLine() + System.getProperty("line.separator");
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+
+            if(singleResponseString.equals("true")){
+                this.cancel(true);
             }
 
             publishProgress(messageFromFhem.toString());
@@ -83,14 +90,16 @@ public class CommunicateWithFhemTelnet extends AsyncTask<String,String,Void> {
     @Override
     protected void onProgressUpdate(String... values) {
         if (onMassageFromFhem != null) {
-            onMassageFromFhem.onMessageFromFhemReceived(values[0]);
+            onMassageFromFhem.onMessageFromFhemReceived(values[0],singleResponse);
         }else{
             Log.e(TAG, "onProgressUpdate: null");
         }
     }
 
+
+
     interface OnMassageFromFhem {
-        void onMessageFromFhemReceived(String messageFromFhem);
+        void onMessageFromFhemReceived(String messageFromFhem, boolean singleResponse);
     }
 
 }

@@ -13,21 +13,8 @@ public class API {
     ConnectToFhem connectionToFhem = null;
     ArrayList<FhemDevice> deviceList = new ArrayList<FhemDevice>();
 
-    public boolean initConnection(ConnectionType connectionType){
-
+    public API(){
         connectionToFhem = new ConnectToFhem();
-        return true;
-    }
-
-    public boolean setHeat(String device, float temperature){
-        String command = "set " +device + " desiredTemperature "+ temperature;
-        connectionToFhem.sendMessage(command);
-        return true;
-    }
-
-    public boolean getHeat(String device){
-
-        return true;
     }
 
     public FhemDevice createDevice(String deviceName, DeviceType deviceType, int widget){
@@ -56,9 +43,9 @@ public class API {
         return true;
     }
 
-    public boolean startAutoUpdate() {
+    public boolean startAutoUpdate(ConnectionType connectionType) {
 
-        connectionToFhem.autoUpdateAllDevices(this.deviceList);
+        connectionToFhem.autoUpdateAllDevices(this.deviceList, connectionType);
         return true;
     }
 
@@ -66,31 +53,5 @@ public class API {
 
         return   connectionToFhem.getFhemParser();
     }
-
-    public boolean play(String device){
-
-        return true;
-    }
-
-    public boolean stop(String device){
-
-        return true;
-    }
-
-    public boolean skip(String device){
-
-        return true;
-    }
-
-    public boolean back(String device){
-
-        return true;
-    }
-
-    public boolean showPlaylists(String device){
-
-        return true;
-    }
-
 
 }

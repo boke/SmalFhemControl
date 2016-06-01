@@ -60,4 +60,5 @@ public class FhemDevice {
         this.status = status;
     }
 
+
 }

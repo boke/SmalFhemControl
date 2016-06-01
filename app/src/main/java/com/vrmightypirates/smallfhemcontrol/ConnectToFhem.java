@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhem {
 
     private static final String TAG = ConnectToFhem.class.getSimpleName();
-    ConnectionType connectionType = ConnectionType.telnet;
+
     CommunicateWithFhemHttp communicateWithFhemHttp = null;
     CommunicateWithFhemTelnet communicateWithFhemTelnet = null;
     private boolean autoUpdateIsRunning = false;
@@ -18,13 +18,14 @@ public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhe
     private  FhemMessageParser fhemParser = new FhemMessageParser();
 
 
-    public boolean sendMessage(String message) {
+    public boolean sendMessage(String message, ConnectionType connectionType) {
 
         switch (connectionType) {
             case http:
                 break;
             case telnet:
-                // connectionTelnet.sendMessage(message);
+                communicateWithFhemTelnet = new CommunicateWithFhemTelnet(this, message.toString(),true);
+
                 break;
             default:
                 return false;
@@ -34,7 +35,7 @@ public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhe
     }
 
 
-    public boolean autoUpdateAllDevices(ArrayList<FhemDevice> deviceList) {
+    public boolean autoUpdateAllDevices(ArrayList<FhemDevice> deviceList, ConnectionType connectionType) {
 
         this.deviceList = deviceList;
         StringBuilder message = new StringBuilder();
@@ -54,7 +55,7 @@ public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhe
             case http:
                 break;
             case telnet:
-                communicateWithFhemTelnet = new CommunicateWithFhemTelnet(this, message.toString());
+                communicateWithFhemTelnet = new CommunicateWithFhemTelnet(this, message.toString(),false);
                 break;
             default:
                 return false;
@@ -64,13 +65,16 @@ public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhe
         return true;
     }
 
-    private boolean parseFhemMessage(String messageFromFhem){
+    private boolean parseFhemMessage(String messageFromFhem, boolean singleResponse, FhemDevice device ){
+
 
         if(deviceList != null){
             fhemParser.parseMessage(messageFromFhem,this.deviceList);
 
-        }else{
-            return false;
+        }else if(device != null){
+
+            fhemParser.parseMessageForSingleDevice(messageFromFhem, device);
+
         }
 
         return true;
@@ -82,8 +86,8 @@ public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhe
     }
 
     @Override
-    public void onMessageFromFhemReceived(String messageFromFhem) {
-        parseFhemMessage(messageFromFhem);
+    public void onMessageFromFhemReceived(String messageFromFhem, boolean singleResponse, FhemDevice device) {
+        parseFhemMessage(messageFromFhem, singleResponse, device);
         Log.i(TAG, "onMessageFromFhemReceived: "+messageFromFhem);
 
     }

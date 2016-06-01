@@ -94,6 +94,6 @@ public class PlaceholderFragment extends Fragment implements FhemMessageParser.D
         Log.i(TAG, "onDeviceStatusChange: " + device.getDeviceName());
         final DeviceHeaterMax deviceHeaterMax = (DeviceHeaterMax)device;
         final TextView textView = (TextView) deviceHeaterMax.getWidget();
-        textView.setText(deviceHeaterMax.getDesireTemperature());
+        textView.setText(deviceHeaterMax.getDesireTemperatureValue());
     }
 }
