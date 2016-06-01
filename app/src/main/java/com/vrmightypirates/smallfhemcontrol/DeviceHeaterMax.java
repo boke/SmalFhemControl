@@ -11,7 +11,7 @@ public class DeviceHeaterMax extends FhemDevice {
 
     public DeviceHeaterMax(String deviceName, Object widget) {
         super(deviceName,DeviceType.HeaterMax, widget);
-        connectToFhem = new ConnectToFhem();
+        connectToFhem = new ConnectToFhem(this);
 
     }
 
@@ -27,7 +27,7 @@ public class DeviceHeaterMax extends FhemDevice {
 
     public void setDesireTemperatureInFhem(String desireTemperature, ConnectionType connectionType) {
         this.desireTemperature = desireTemperature;
-        connectToFhem.sendMessage("set " + this.getDeviceName() + " desireTemperature " + desireTemperature, connectionType);
+        connectToFhem.sendMessage("set " + this.getDeviceName() + " desiredTemperature " + desireTemperature, connectionType);
 
     }
 

@@ -23,6 +23,7 @@ public class PlaceholderFragment extends Fragment implements FhemMessageParser.D
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String TAG = PlaceholderFragment.class.getSimpleName();
     private SeekBar temperatureControlBathroom = null;
+    DeviceHeaterMax deviceHeaterMaxBathroom;
     API api = new API();
     View rootView;
     private TextView currentTemperatureBathroomTextView;
@@ -52,13 +53,19 @@ public class PlaceholderFragment extends Fragment implements FhemMessageParser.D
         currentTemperatureBathroomTextView = (TextView) rootView.findViewById(R.id.themperatureHeater);
 //            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
         temperatureControlBathroom = (SeekBar) rootView.findViewById(R.id.seekBarHeater);
+        temperatureControlBathroom.setMax(30);
         temperatureControlBathroom.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress,
                                           boolean fromUser) {
+                if(deviceHeaterMaxBathroom!= null){
 
-                Log.v("Progress changed", "Font size: " + progress);
+                    deviceHeaterMaxBathroom.setDesireTemperatureInFhem(String.valueOf(temperatureControlBathroom.getProgress()), ConnectionType.telnet);
+                }
+
+
+
             }
 
             @Override
@@ -81,11 +88,17 @@ public class PlaceholderFragment extends Fragment implements FhemMessageParser.D
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        api.initConnection(ConnectionType.telnet);
-        DeviceHeaterMax deviceHeaterMaxBathroom = new DeviceHeaterMax("BZ.HT.BadHeizung", currentTemperatureBathroomTextView);
+
+        /*DeviceHeaterMax deviceHeaterMaxBathroom = new DeviceHeaterMax("BZ.HT.BadHeizung", currentTemperatureBathroomTextView);
         api.addDeviceToUpdateListener(deviceHeaterMaxBathroom);
-        api.startAutoUpdate();
+        api.startAutoUpdate(ConnectionType.telnet);*/
+
+        deviceHeaterMaxBathroom = new DeviceHeaterMax("BZ.HT.BadHeizung", currentTemperatureBathroomTextView);
+
+
+
         api.getParser().addToDeviceChangeListener(this);
+
 
     }
 

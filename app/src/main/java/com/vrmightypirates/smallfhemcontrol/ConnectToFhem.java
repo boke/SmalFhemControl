@@ -16,15 +16,28 @@ public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhe
     private boolean autoUpdateIsRunning = false;
     private ArrayList<FhemDevice> deviceList;
     private  FhemMessageParser fhemParser = new FhemMessageParser();
+    FhemDevice device = null;
+
+    public ConnectToFhem() {
+
+    }
+
+    public ConnectToFhem(FhemDevice device) {
+        this.device = device;
+
+    }
+
 
 
     public boolean sendMessage(String message, ConnectionType connectionType) {
-
+        Log.i(TAG, "setDesireTemperatureInFhem: " +  message);
         switch (connectionType) {
             case http:
                 break;
             case telnet:
+                Log.i(TAG, "setDesireTemperatureInFhem: " +  message);
                 communicateWithFhemTelnet = new CommunicateWithFhemTelnet(this, message.toString(),true);
+
 
                 break;
             default:
@@ -65,16 +78,14 @@ public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhe
         return true;
     }
 
-    private boolean parseFhemMessage(String messageFromFhem, boolean singleResponse, FhemDevice device ){
+    private boolean parseFhemMessage(String messageFromFhem, boolean singleResponse){
 
+        if(singleResponse){
 
-        if(deviceList != null){
+            fhemParser.parseMessageForSingleDevice(messageFromFhem,this.device);
+
+        }else if(deviceList != null){
             fhemParser.parseMessage(messageFromFhem,this.deviceList);
-
-        }else if(device != null){
-
-            fhemParser.parseMessageForSingleDevice(messageFromFhem, device);
-
         }
 
         return true;
@@ -86,8 +97,8 @@ public class ConnectToFhem implements CommunicateWithFhemTelnet.OnMassageFromFhe
     }
 
     @Override
-    public void onMessageFromFhemReceived(String messageFromFhem, boolean singleResponse, FhemDevice device) {
-        parseFhemMessage(messageFromFhem, singleResponse, device);
+    public void onMessageFromFhemReceived(String messageFromFhem, boolean singleResponse) {
+        parseFhemMessage(messageFromFhem, singleResponse);
         Log.i(TAG, "onMessageFromFhemReceived: "+messageFromFhem);
 
     }

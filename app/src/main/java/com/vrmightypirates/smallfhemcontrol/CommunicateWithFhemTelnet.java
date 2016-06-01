@@ -23,12 +23,11 @@ public class CommunicateWithFhemTelnet extends AsyncTask<String,String,Void> {
     String socketIp = "192.168.0.17";
     int socketPort = 7072;
 
-
-
-    CommunicateWithFhemTelnet(OnMassageFromFhem onMassageFromFhem, String message, boolean singelResponse){
+    CommunicateWithFhemTelnet(OnMassageFromFhem onMassageFromFhem, String message, boolean singleResponse){
         this.onMassageFromFhem = onMassageFromFhem;
-        this.singleResponse = singelResponse;
-        this.execute(message,Boolean.toString(singelResponse));
+        this.singleResponse = singleResponse;
+        Log.i(TAG, "CommunicateWithFhemTelnet: " + message);
+        this.execute(message,Boolean.toString(singleResponse));
     }
 
     @Override
@@ -73,6 +72,7 @@ public class CommunicateWithFhemTelnet extends AsyncTask<String,String,Void> {
             int i = 1;
             try {
                 messageFromFhem = inputReader.readLine() + System.getProperty("line.separator");
+                Log.i(TAG, "doInBackground: "+ messageFromFhem);
             } catch (IOException e) {
                 e.printStackTrace();
             }

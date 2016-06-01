@@ -17,6 +17,7 @@ public class API {
         connectionToFhem = new ConnectToFhem();
     }
 
+
     public FhemDevice createDevice(String deviceName, DeviceType deviceType, int widget){
 
         FhemDevice device = null;
@@ -48,6 +49,7 @@ public class API {
         connectionToFhem.autoUpdateAllDevices(this.deviceList, connectionType);
         return true;
     }
+
 
     public FhemMessageParser getParser() {
 
